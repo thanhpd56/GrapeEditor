@@ -1,18 +1,16 @@
-import React, {Component} from 'react';
-import './App.css';
-import {Card, CardBody, Input} from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Tab1 from "./Tab1";
-import Tab2 from "./Tab2";
+import React from 'react'
+import {Input} from "reactstrap";
+import GrapesEditor from "./GrapesEditor";
 
 
-class App extends Component {
+export default class Tab2 extends React.Component{
+
     constructor(props) {
         super(props);
         this.state = {
             step: '0',
             flow: {
-              html: ''
+                html: ''
             },
             editorStore: {
             }
@@ -40,21 +38,15 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div>
                 <Input value={this.state.step} onChange={this.handleChange} type='select'>
                     <option value={0}>0</option>
                     <option value={1}>1</option>
                 </Input>
-
-                <Card>
-                    <CardBody>
-                        {this.state.step === '0' && <Tab1/>}
-                        {this.state.step === '1' && <Tab2/>}
-                    </CardBody>
-                </Card>
+                {this.state.step === '0' && <div>Hello</div>}
+                {this.state.step === '1' && <GrapesEditor store={this.store} load={this.load}
+                                                          template={this.state.editorStore}/>}
             </div>
         );
     }
 }
-
-export default App;
