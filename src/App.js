@@ -8,7 +8,11 @@ class App extends Component {
         super(props);
         this.state = {
             step: '0',
-            editorStore: {}
+            flow: {
+              html: ''
+            },
+            editorStore: {
+            }
         };
     }
 
@@ -27,6 +31,7 @@ class App extends Component {
 
     store = (data, clb, clbErr) => {
         this.setState({editorStore: {...data}});
+        console.log(clb);
         clb(); // might be called inside some async method
     };
 
@@ -39,10 +44,7 @@ class App extends Component {
                 </Input>
                 {this.state.step === '0' && <div>Hello</div>}
                 {this.state.step === '1' && <GrapesEditor store={this.store} load={this.load}
-                    template={'<div class="c1896" style="box-sizing: border-box; padding: 10px;">Phan Dang Thanh 123\n' +
-                    '</div>\n' +
-                    '<div class="c1970" style="box-sizing: border-box; padding: 10px;">Insert your text asdfsdf\n' +
-                    '</div>'}/>}
+                    template={this.state.editorStore}/>}
             </div>
         );
     }

@@ -3,11 +3,12 @@
 import React from 'react';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
+import newsletters from 'grapesjs-preset-newsletter'
 import 'grapesjs-preset-newsletter/dist/grapesjs-preset-newsletter.css';
 
 type Props = {
     template: String,
-    load:Function,
+    load: Function,
     store: Function
 }
 
@@ -23,26 +24,32 @@ class GrapesEditor extends React.Component<Props> {
         return false;
     }
 
-
-    exportHtml = () => {
-
-    };
-
     componentDidMount() {
         const editor = grapesjs.init({
             container: '#gjs',
             plugins: ['gjs-preset-newsletter'],
-            components: this.props.template,
             style: '.txt-red{color: red}',
+            forceClass: false,
             storageManager: {
-                type: null
+                type: null,
+                autoload: 1
             },
         });
-        this.setState({
-            editor: editor
-        }, () => {
-            console.log(this.state.editor);
+
+        this.setState({editor});
+        editor.on('load', (some, argument) => {
+            console.log('editor load');
+            // do something
+        })
+
+        let storageManager = editor.StorageManager;
+        storageManager.add('store', {
+            load: this.props.load,
+            store: this.props.store
         });
+
+        storageManager.setCurrent('store');
+        editor.load();
     }
 
 
@@ -51,7 +58,7 @@ class GrapesEditor extends React.Component<Props> {
             <div>
                 <button onClick={() => {
                     console.log(this.state.editor.getHtml());
-                    console.log(this.state.editor.StorageManage);
+                    console.log(this.state.editor.StorageManager);
                 }}>Export html
                 </button>
                 <div id='gjs'/>
@@ -62,7 +69,6 @@ class GrapesEditor extends React.Component<Props> {
 
     componentWillUnmount() {
         if (this.state.editor) {
-            console.log('unmount and destroy editor');
             this.state.editor.destroy();
         }
     }
